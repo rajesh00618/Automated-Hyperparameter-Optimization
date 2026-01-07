@@ -35,20 +35,102 @@ The optimized XGBoost model achieves excellent performance on the California Hou
 ```
 xgboost_optuna_project/
 ├── Dockerfile                 # Containerized deployment
+├── Dockerfile.demo           # Demo application container
+├── requirements.txt          # Python dependencies
+├── requirements_demo.txt     # Demo app dependencies
+├── demo_app.py              # Streamlit demo application
+├── deploy_demo.sh           # Demo deployment script
 ├── notebooks/
-│   └── analysis.ipynb         # Interactive analysis notebook
-├── outputs/                   # Generated results and artifacts
-│   ├── results.json          # Optimization summary
+│   └── analysis.ipynb        # Interactive analysis notebook
+├── outputs/                  # Generated results and artifacts
+│   ├── results.json         # Optimization summary
 │   ├── optimization_history.png
 │   ├── param_importance.png
-│   └── mlruns/               # MLflow tracking data
+│   └── mlruns/              # MLflow tracking data
 └── src/
-    ├── data.py               # Data loading utilities
-    ├── objective.py          # Optuna objective function
-    ├── optimize.py           # Main optimization pipeline
-    ├── requirements.txt      # Python dependencies
-    └── optuna_study.db       # Optuna study database
+    ├── __init__.py          # Python package
+    ├── data_loader.py       # Data loading utilities
+    ├── objective.py         # Optuna objective function
+    ├── optimize.py          # Main optimization pipeline
+    ├── evaluate.py          # Results generation
+    └── optuna_study.db      # Study database (generated)
 ```
+
+## 🎬 Live Demo & Video Demo
+
+### **Live Interactive Demo**
+A Streamlit web application that showcases the optimization results interactively:
+
+**🌐 Live Demo URL**: [Deploy on your preferred cloud platform]
+
+**Features:**
+- 📊 Real-time metrics dashboard
+- 📈 Interactive optimization history plots
+- 🎯 Hyperparameter importance visualization
+- 📋 Detailed trial-by-trial results
+- 🔍 Performance comparison with baseline
+
+**Local Demo Setup:**
+```bash
+# Ensure outputs exist from optimization
+ls outputs/results.json
+
+# Install demo dependencies
+pip install -r requirements_demo.txt
+
+# Run the demo app
+streamlit run demo_app.py
+```
+
+**Docker Demo Deployment:**
+```bash
+# Build demo image
+docker build -f Dockerfile.demo -t xgboost-demo .
+
+# Run locally
+docker run -p 8501:8501 xgboost-demo
+
+# Access at: http://localhost:8501
+```
+
+**Cloud Deployment Options:**
+- **Heroku**: `heroku create && git push heroku main`
+- **Railway**: Connect GitHub repository
+- **Render**: Deploy from Docker image
+- **AWS/GCP**: Use ECS/EKS or Cloud Run
+
+### **Video Demo**
+**📹 Video Demo URL**: [Upload to YouTube/Vimeo/Google Drive]
+
+**Video Content:**
+1. **Project Overview** (0:00-1:30)
+   - Problem statement and objectives
+   - Technologies used
+
+2. **Docker Execution** (1:30-4:00)
+   - Building the container
+   - Running the optimization pipeline
+   - Monitoring progress
+
+3. **Results Analysis** (4:00-7:00)
+   - Performance metrics achieved
+   - Hyperparameter importance insights
+   - MLflow experiment tracking
+
+4. **Live Demo Walkthrough** (7:00-9:00)
+   - Interactive dashboard features
+   - Visualization explanations
+
+5. **Technical Deep Dive** (9:00-12:00)
+   - Code architecture explanation
+   - MLOps best practices demonstrated
+
+**Video Specifications:**
+- Duration: 10-12 minutes
+- Resolution: 1080p
+- Include voice narration
+- Show terminal commands
+- Demonstrate all key features
 
 ## 🚀 Quick Start
 
@@ -61,8 +143,9 @@ xgboost_optuna_project/
 
 1. **Clone and setup**:
    ```bash
-   cd xgboost_optuna_project
-   pip install -r src/requirements.txt
+   git clone https://github.com/rajesh00618/Automated-Hyperparameter-Optimization.git
+   cd Automated-Hyperparameter-Optimization
+   pip install -r requirements.txt
    ```
 
 2. **Run optimization**:
@@ -77,6 +160,12 @@ xgboost_optuna_project/
    jupyter notebook analysis.ipynb
    ```
 
+4. **Launch interactive demo**:
+   ```bash
+   pip install -r requirements_demo.txt
+   streamlit run demo_app.py
+   ```
+
 ### Docker Execution
 
 1. **Build container**:
@@ -89,10 +178,62 @@ xgboost_optuna_project/
    docker run --rm -v $(pwd)/outputs:/app/outputs xgboost-optuna-pipeline
    ```
 
-3. **Access results**:
-   - Results: `outputs/results.json`
-   - Visualizations: `outputs/*.png`
-   - MLflow UI: `mlflow ui --backend-store-uri outputs/mlruns`
+3. **Deploy demo**:
+   ```bash
+   # Build demo container
+   docker build -f Dockerfile.demo -t xgboost-demo .
+
+   # Run demo locally
+   docker run -p 8501:8501 xgboost-demo
+   ```
+
+4. **Access interfaces**:
+   - **Demo App**: http://localhost:8501
+   - **Results**: `outputs/results.json`
+   - **Visualizations**: `outputs/*.png`
+   - **MLflow UI**: `mlflow ui --backend-store-uri outputs/mlruns`
+
+## ☁️ Cloud Deployment Options
+
+### **Heroku Deployment**
+```bash
+# Install Heroku CLI and login
+heroku create your-xgboost-demo
+
+# Deploy demo app
+git push heroku main
+
+# Access at: https://your-xgboost-demo.herokuapp.com
+```
+
+### **Railway Deployment**
+1. Connect your GitHub repository to Railway
+2. Set build command: `docker build -f Dockerfile.demo -t app .`
+3. Set start command: `streamlit run demo_app.py --server.port=$PORT --server.address=0.0.0.0`
+4. Deploy automatically on git push
+
+### **Render Deployment**
+1. Create new Web Service from Docker
+2. Connect GitHub repository
+3. Set Docker command: `docker build -f Dockerfile.demo -t app .`
+4. Deploy
+
+### **AWS/GCP Deployment**
+```bash
+# Build and push to container registry
+docker build -f Dockerfile.demo -t xgboost-demo .
+docker tag xgboost-demo gcr.io/your-project/xgboost-demo
+docker push gcr.io/your-project/xgboost-demo
+
+# Deploy to Cloud Run (GCP) or ECS (AWS)
+```
+
+### **Local Development Server**
+```bash
+# Using the deployment script
+chmod +x deploy_demo.sh
+./deploy_demo.sh
+```
 
 ## 🔧 Configuration
 
@@ -265,4 +406,4 @@ For questions or issues:
 
 ---
 
-**Built with ❤️ for the ML engineering community**
+**Built with  for the ML engineering community**
